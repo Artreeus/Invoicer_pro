@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import type { Company, BankDetails, MobileBanking } from '../../types';
 import { Building2, CreditCard, Smartphone, Palette } from 'lucide-react';
+import ImageUpload from '../ui/ImageUpload';
 
 interface CompanyFormProps {
   company?: Company | null;
@@ -99,9 +100,8 @@ export default function CompanyForm({ company, onSubmit, onCancel }: CompanyForm
             <input className={inputClass} value={name} onChange={e => setName(e.target.value)} required placeholder="e.g. Acme Corporation Ltd." />
           </div>
           <div>
-            <label className={labelClass}>Logo URL</label>
-            <input className={inputClass} value={logoUrl} onChange={e => setLogoUrl(e.target.value)} placeholder="https://example.com/logo.png" />
-            {logoUrl && <img src={logoUrl} alt="Preview" className="mt-2 h-12 object-contain rounded" />}
+            <label className={labelClass}>Logo</label>
+            <ImageUpload value={logoUrl} onChange={setLogoUrl} />
           </div>
           <div>
             <label className={labelClass}>Address</label>
