@@ -24,19 +24,10 @@ export default function ReportsPage() {
     [invoices, dateFrom, dateTo]
   );
 
-  const vatSummary = useMemo(() => {
-    const rates: Record<number, { count: number; total: number }> = {};
-    filtered.forEach(inv => {
-      (inv as any).items?.forEach?.((item: any) => {
-        if (!rates[item.vat_rate]) rates[item.vat_rate] = { count: 0, total: 0 };
-        rates[item.vat_rate].count++;
-        rates[item.vat_rate].total += item.vat_amount || 0;
-      });
-    });
-    const paidInvoices = filtered.filter(i => i.status === 'paid');
-    const totalVat = paidInvoices.reduce((s, i) => s + i.total_vat, 0);
-    return { rates, totalVat };
-  }, [filtered]);
+  const totalVat = useMemo(
+    () => filtered.filter(i => i.status === 'paid').reduce((s, i) => s + i.total_vat, 0),
+    [filtered]
+  );
 
   const monthlySummary = useMemo(() => {
     const months: Record<string, { revenue: number; count: number }> = {};
@@ -130,7 +121,7 @@ export default function ReportsPage() {
         </div>
         <div className="bg-white rounded-xl border border-gray-100 p-5">
           <p className="text-xs text-gray-500 font-medium">VAT Collected</p>
-          <p className="text-xl font-bold text-amber-600 mt-1">{formatCurrency(vatSummary.totalVat, 'BDT')}</p>
+          <p className="text-xl font-bold text-amber-600 mt-1">{formatCurrency(totalVat, 'BDT')}</p>
         </div>
       </div>
 
