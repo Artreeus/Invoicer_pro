@@ -1,5 +1,6 @@
-import { ChevronDown, Plus, Receipt, LogOut, User as UserIcon } from 'lucide-react';
+import { ChevronDown, Plus, Receipt, LogOut, User as UserIcon, Settings } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useCompanyStore } from '../../store/companyStore';
 import { useAuthStore } from '../../store/authStore';
 
@@ -107,12 +108,20 @@ export default function Header() {
                 <p className="text-sm font-medium text-gray-900 truncate">{user?.name}</p>
                 <p className="text-xs text-gray-500 truncate">{user?.email}</p>
               </div>
+              <Link
+                to="/settings"
+                onClick={() => setUserMenuOpen(false)}
+                className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+              >
+                <Settings size={16} className="text-gray-400" />
+                Account settings
+              </Link>
               <button
                 onClick={() => {
                   setUserMenuOpen(false);
                   logout();
                 }}
-                className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors border-t border-gray-100"
               >
                 <LogOut size={16} className="text-gray-400" />
                 Sign out
