@@ -16,11 +16,21 @@ import SettingsPage from './pages/SettingsPage';
 import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+import PublicLayout from './components/public/PublicLayout';
+import AboutPage from './pages/public/AboutPage';
+import ContactPage from './pages/public/ContactPage';
+import PrivacyPage from './pages/public/PrivacyPage';
+import TermsPage from './pages/public/TermsPage';
+import BlogIndexPage from './pages/public/BlogIndexPage';
+import BlogArticlePage from './pages/public/BlogArticlePage';
+import CookieConsent from './components/ads/CookieConsent';
 import { useAuthStore } from './store/authStore';
+import { useThemeStore } from './store/themeStore';
 
 function App() {
   const status = useAuthStore(s => s.status);
   const initialize = useAuthStore(s => s.initialize);
+  const theme = useThemeStore(s => s.theme);
 
   useEffect(() => {
     initialize();
@@ -28,7 +38,7 @@ function App() {
 
   if (status === 'loading') {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950">
         <Loader2 size={28} className="animate-spin text-teal-600" />
       </div>
     );
@@ -38,11 +48,20 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Toaster position="top-right" richColors />
+      <Toaster position="top-right" richColors theme={theme} />
+      <CookieConsent />
       <Routes>
         <Route path="/" element={authed ? <Navigate to="/dashboard" replace /> : <LandingPage />} />
         <Route path="/login" element={authed ? <Navigate to="/dashboard" replace /> : <LoginPage />} />
         <Route path="/register" element={authed ? <Navigate to="/dashboard" replace /> : <RegisterPage />} />
+        <Route element={<PublicLayout />}>
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/privacy" element={<PrivacyPage />} />
+          <Route path="/terms" element={<TermsPage />} />
+          <Route path="/blog" element={<BlogIndexPage />} />
+          <Route path="/blog/:slug" element={<BlogArticlePage />} />
+        </Route>
         <Route element={<RequireAuth><Layout /></RequireAuth>}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/companies" element={<CompaniesPage />} />
