@@ -63,6 +63,12 @@ export default function LandingPage() {
                 <span key={t} className="flex items-center gap-1.5"><Check size={15} className="text-teal-600 dark:text-teal-400" /> {t}</span>
               ))}
             </div>
+            <p className="mt-5 text-sm text-gray-500 dark:text-gray-400">
+              Just need one invoice?{' '}
+              <Link to="/invoice-generator" className="font-medium text-teal-600 dark:text-teal-400 hover:underline">
+                Try the free generator — no sign-up →
+              </Link>
+            </p>
           </div>
         </section>
 
@@ -105,9 +111,7 @@ export default function LandingPage() {
         </section>
 
         {/* Ad */}
-        <div className="max-w-3xl mx-auto px-4 lg:px-6 pt-12">
-          <AdUnit />
-        </div>
+        <AdUnit className="max-w-3xl mx-auto px-4 lg:px-6 mt-12" />
 
         {/* CTA */}
         <section className="max-w-6xl mx-auto px-4 lg:px-6 py-16 lg:py-24">
