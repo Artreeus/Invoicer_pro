@@ -121,6 +121,47 @@ app.get('/api/auth/me', wrap(async (req, res) => {
   res.json(serializeUser(user));
 }));
 
+// Update the signed-in user's profile (name and/or email).
+app.patch('/api/auth/me', wrap(async (req, res) => {
+  const updates = {};
+  if (typeof req.body.name === 'string' && req.body.name.trim()) {
+    updates.name = req.body.name.trim();
+  }
+  if (typeof req.body.email === 'string' && req.body.email.trim()) {
+    const email = req.body.email.trim().toLowerCase();
+    const existing = await coll('users').findOne({ email });
+    if (existing && existing._id !== req.user.id) {
+      return res.status(409).json({ error: 'An account with this email already exists' });
+    }
+    updates.email = email;
+  }
+  if (!Object.keys(updates).length) {
+    return res.status(400).json({ error: 'Nothing to update' });
+  }
+  updates.updated_at = now();
+  await coll('users').updateOne({ _id: req.user.id }, { $set: updates });
+  const user = await coll('users').findOne({ _id: req.user.id });
+  res.json(serializeUser(user));
+}));
+
+// Change the signed-in user's password (requires the current password).
+app.post('/api/auth/change-password', wrap(async (req, res) => {
+  const current = req.body.current_password || '';
+  const next = req.body.new_password || '';
+  if (next.length < 6) {
+    return res.status(400).json({ error: 'New password must be at least 6 characters' });
+  }
+  const user = await coll('users').findOne({ _id: req.user.id });
+  if (!user || !(await verifyPassword(current, user.password_hash))) {
+    return res.status(401).json({ error: 'Current password is incorrect' });
+  }
+  await coll('users').updateOne(
+    { _id: req.user.id },
+    { $set: { password_hash: await hashPassword(next), updated_at: now() } }
+  );
+  res.status(204).end();
+}));
+
 // ---- Uploads ------------------------------------------------------------------
 
 // Hand the browser a short-lived signature so it can upload an image straight to
@@ -319,7 +360,14 @@ app.post('/api/invoices', wrap(async (req, res) => {
     updated_at: now(),
   };
   delete doc.id;
-  await coll('invoices').insertOne(doc);
+  try {
+    await coll('invoices').insertOne(doc);
+  } catch (err) {
+    if (err.code === 11000) {
+      return res.status(409).json({ error: `Invoice number "${doc.invoice_number}" already exists` });
+    }
+    throw err;
+  }
   await insertItems(invoiceId, req.user.id, items);
   res.status(201).json(serialize(doc));
 }));
@@ -331,7 +379,14 @@ app.put('/api/invoices/:id', wrap(async (req, res) => {
   const { updates = {}, items = [] } = req.body;
   const { id, owner_id, ...rest } = updates;
   rest.updated_at = now();
-  await coll('invoices').updateOne({ _id: req.params.id }, { $set: rest });
+  try {
+    await coll('invoices').updateOne({ _id: req.params.id }, { $set: rest });
+  } catch (err) {
+    if (err.code === 11000) {
+      return res.status(409).json({ error: `Invoice number "${rest.invoice_number}" already exists` });
+    }
+    throw err;
+  }
   await coll('invoice_items').deleteMany({ invoice_id: req.params.id });
   await insertItems(req.params.id, req.user.id, items);
   const doc = await coll('invoices').findOne({ _id: req.params.id });
