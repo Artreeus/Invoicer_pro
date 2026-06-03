@@ -4,7 +4,31 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>InvoiceBD - Invoice Generator for Bangladesh</title>
+    <title>InvoiceBD — Free VAT Invoice Generator for Bangladesh</title>
+    <meta
+      name="description"
+      content="InvoiceBD is a free, professional invoice generator built for Bangladesh — create VAT-compliant invoices with 13 templates, multi-company support, and bKash, Nagad & Rocket payment details."
+    />
+    <meta name="keywords" content="invoice generator, VAT invoice Bangladesh, BIN TIN, bKash Nagad Rocket, free invoice maker, billing software" />
+    <meta name="author" content="InvoiceBD" />
+    <meta name="theme-color" content="#0d9488" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="InvoiceBD" />
+    <meta property="og:title" content="InvoiceBD — Free VAT Invoice Generator for Bangladesh" />
+    <meta property="og:description" content="Create professional, VAT-compliant invoices in minutes. 13 templates, multi-company support, and local payment details built in." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script>
+      // Apply the saved/system theme before paint to avoid a flash of the wrong theme.
+      (function () {
+        try {
+          var t = localStorage.getItem('theme');
+          if (t !== 'light' && t !== 'dark') {
+            t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          }
+          if (t === 'dark') document.documentElement.classList.add('dark');
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
