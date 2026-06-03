@@ -23,6 +23,7 @@ import PrivacyPage from './pages/public/PrivacyPage';
 import TermsPage from './pages/public/TermsPage';
 import BlogIndexPage from './pages/public/BlogIndexPage';
 import BlogArticlePage from './pages/public/BlogArticlePage';
+import InvoiceGeneratorPage from './pages/public/InvoiceGeneratorPage';
 import CookieConsent from './components/ads/CookieConsent';
 import { useAuthStore } from './store/authStore';
 import { useThemeStore } from './store/themeStore';
@@ -55,6 +56,7 @@ function App() {
         <Route path="/login" element={authed ? <Navigate to="/dashboard" replace /> : <LoginPage />} />
         <Route path="/register" element={authed ? <Navigate to="/dashboard" replace /> : <RegisterPage />} />
         <Route element={<PublicLayout />}>
+          <Route path="/invoice-generator" element={<InvoiceGeneratorPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/privacy" element={<PrivacyPage />} />

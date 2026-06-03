@@ -14,6 +14,7 @@ const ARTICLE_SLUGS = [
 
 const PUBLIC_PATHS = [
   '/',
+  '/invoice-generator',
   '/about',
   '/contact',
   '/privacy',

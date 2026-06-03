@@ -6,6 +6,7 @@ const columns = [
     title: 'Product',
     links: [
       { to: '/', label: 'Home' },
+      { to: '/invoice-generator', label: 'Free generator' },
       { to: '/register', label: 'Get started' },
       { to: '/login', label: 'Sign in' },
     ],
