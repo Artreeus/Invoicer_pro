@@ -92,3 +92,30 @@ export function statusColor(status: string): string {
     default: return 'bg-gray-100 text-gray-700';
   }
 }
+
+type StatusLike = { status: string; due_date?: string | null };
+
+// A 'sent' invoice whose due date has passed is treated as overdue for display,
+// without changing the stored status.
+export function isOverdue(invoice: StatusLike): boolean {
+  if (invoice.status !== 'sent' || !invoice.due_date) return false;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const due = new Date(invoice.due_date);
+  due.setHours(0, 0, 0, 0);
+  return due < today;
+}
+
+// The status to show in the UI: 'overdue' for past-due sent invoices, else stored status.
+export function effectiveStatus(invoice: StatusLike): string {
+  return isOverdue(invoice) ? 'overdue' : invoice.status;
+}
+
+// Whole days from today to the given date: positive = future, negative = past.
+export function daysFromToday(dateStr: string): number {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const d = new Date(dateStr);
+  d.setHours(0, 0, 0, 0);
+  return Math.round((d.getTime() - today.getTime()) / 86_400_000);
+}

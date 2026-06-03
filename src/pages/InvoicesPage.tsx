@@ -5,7 +5,7 @@ import { toast } from 'sonner';
 import { useCompanyStore } from '../store/companyStore';
 import { useInvoiceStore } from '../store/invoiceStore';
 import type { Invoice, InvoiceStatus } from '../types';
-import { formatCurrency, formatDate, statusColor } from '../lib/utils';
+import { formatCurrency, formatDate, statusColor, effectiveStatus, isOverdue, daysFromToday } from '../lib/utils';
 import Badge from '../components/ui/Badge';
 import EmptyState from '../components/ui/EmptyState';
 
@@ -34,7 +34,7 @@ export default function InvoicesPage() {
   const filtered = invoices.filter(inv => {
     const matchSearch = inv.invoice_number.toLowerCase().includes(search.toLowerCase()) ||
       (inv.client as any)?.name?.toLowerCase().includes(search.toLowerCase());
-    const matchStatus = statusFilter === 'all' || inv.status === statusFilter;
+    const matchStatus = statusFilter === 'all' || effectiveStatus(inv) === statusFilter;
     return matchSearch && matchStatus;
   });
 
@@ -68,6 +68,19 @@ export default function InvoicesPage() {
       case 'cancelled': return <Ban size={12} />;
       default: return null;
     }
+  };
+
+  // Inline due-date hint shown next to an unpaid invoice's date.
+  const dueLabel = (inv: Invoice) => {
+    if (inv.status !== 'sent' || !inv.due_date) return null;
+    const days = daysFromToday(inv.due_date);
+    if (isOverdue(inv)) {
+      const n = Math.abs(days);
+      return <span className="text-red-500 font-medium"> · Overdue by {n} day{n === 1 ? '' : 's'}</span>;
+    }
+    if (days === 0) return <span className="text-amber-500 font-medium"> · Due today</span>;
+    if (days <= 7) return <span className="text-amber-500"> · Due in {days} day{days === 1 ? '' : 's'}</span>;
+    return null;
   };
 
   if (!activeCompanyId) {
@@ -154,12 +167,13 @@ export default function InvoicesPage() {
                   <div>
                     <div className="flex items-center gap-2">
                       <span className="font-semibold text-gray-900 text-sm">{inv.invoice_number}</span>
-                      <Badge className={statusColor(inv.status)}>
-                        <span className="flex items-center gap-1">{statusIcon(inv.status)} {inv.status}</span>
+                      <Badge className={statusColor(effectiveStatus(inv))}>
+                        <span className="flex items-center gap-1">{statusIcon(effectiveStatus(inv))} {effectiveStatus(inv)}</span>
                       </Badge>
                     </div>
                     <div className="text-xs text-gray-500 mt-0.5">
                       {(inv.client as any)?.name ?? 'No client'} &middot; {formatDate(inv.issue_date)}
+                      {dueLabel(inv)}
                     </div>
                   </div>
                 </div>

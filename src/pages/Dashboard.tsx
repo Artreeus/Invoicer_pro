@@ -4,7 +4,7 @@ import { FileText, DollarSign, Clock, AlertTriangle, Plus, Users, ArrowRight } f
 import { useCompanyStore } from '../store/companyStore';
 import { useInvoiceStore } from '../store/invoiceStore';
 import { useClientStore } from '../store/clientStore';
-import { formatCurrency, formatDate, statusColor } from '../lib/utils';
+import { formatCurrency, formatDate, statusColor, effectiveStatus } from '../lib/utils';
 import Badge from '../components/ui/Badge';
 import EmptyState from '../components/ui/EmptyState';
 
@@ -45,7 +45,7 @@ export default function Dashboard() {
 
   const totalRevenue = invoices.filter(i => i.status === 'paid').reduce((s, i) => s + i.grand_total, 0);
   const outstanding = invoices.filter(i => i.status === 'sent').reduce((s, i) => s + i.grand_total, 0);
-  const overdueCount = invoices.filter(i => i.status === 'overdue').length;
+  const overdueCount = invoices.filter(i => effectiveStatus(i) === 'overdue').length;
   const draftCount = invoices.filter(i => i.status === 'draft').length;
   const recentInvoices = invoices.slice(0, 5);
 
@@ -113,7 +113,7 @@ export default function Dashboard() {
                   <div>
                     <div className="flex items-center gap-2">
                       <span className="text-sm font-medium text-gray-900">{inv.invoice_number}</span>
-                      <Badge className={statusColor(inv.status)}>{inv.status}</Badge>
+                      <Badge className={statusColor(effectiveStatus(inv))}>{effectiveStatus(inv)}</Badge>
                     </div>
                     <p className="text-xs text-gray-400 mt-0.5">{(inv.client as any)?.name ?? 'No client'} &middot; {formatDate(inv.issue_date)}</p>
                   </div>
@@ -129,9 +129,9 @@ export default function Dashboard() {
           <div className="space-y-3">
             {[
               { label: 'Paid', count: invoices.filter(i => i.status === 'paid').length, color: '#10b981' },
-              { label: 'Sent', count: invoices.filter(i => i.status === 'sent').length, color: '#3b82f6' },
+              { label: 'Sent', count: invoices.filter(i => effectiveStatus(i) === 'sent').length, color: '#3b82f6' },
               { label: 'Draft', count: invoices.filter(i => i.status === 'draft').length, color: '#9ca3af' },
-              { label: 'Overdue', count: invoices.filter(i => i.status === 'overdue').length, color: '#ef4444' },
+              { label: 'Overdue', count: invoices.filter(i => effectiveStatus(i) === 'overdue').length, color: '#ef4444' },
             ].map(item => {
               const total = invoices.length || 1;
               const pct = (item.count / total) * 100;
