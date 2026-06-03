@@ -1,11 +1,18 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import Header from './Header';
 import MobileNav from './MobileNav';
+import { useCompanyStore } from '../../store/companyStore';
 
 export default function Layout() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const fetchCompanies = useCompanyStore(s => s.fetchCompanies);
+
+  // Load the signed-in user's companies once the authenticated shell mounts.
+  useEffect(() => {
+    fetchCompanies();
+  }, [fetchCompanies]);
 
   return (
     <div className="flex h-screen bg-gray-50 overflow-hidden">

@@ -1,17 +1,25 @@
-import { ChevronDown, Plus, Receipt } from 'lucide-react';
+import { ChevronDown, Plus, Receipt, LogOut, User as UserIcon } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 import { useCompanyStore } from '../../store/companyStore';
+import { useAuthStore } from '../../store/authStore';
 
 export default function Header() {
   const { companies, activeCompanyId, setActiveCompany } = useCompanyStore();
+  const user = useAuthStore(s => s.user);
+  const logout = useAuthStore(s => s.logout);
   const activeCompany = companies.find(c => c.id === activeCompanyId);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const userMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
         setDropdownOpen(false);
+      }
+      if (userMenuRef.current && !userMenuRef.current.contains(e.target as Node)) {
+        setUserMenuOpen(false);
       }
     }
     document.addEventListener('mousedown', handleClickOutside);
@@ -29,57 +37,89 @@ export default function Header() {
 
       <div className="hidden lg:block" />
 
-      <div className="relative" ref={dropdownRef}>
-        {companies.length > 0 ? (
-          <>
-            <button
-              onClick={() => setDropdownOpen(!dropdownOpen)}
-              className="flex items-center gap-2 px-3 py-2 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors text-sm"
-            >
-              {activeCompany?.logo_url ? (
-                <img src={activeCompany.logo_url} alt="" className="w-5 h-5 rounded object-cover" />
-              ) : (
-                <div className="w-5 h-5 rounded bg-teal-100 flex items-center justify-center text-[10px] font-bold text-teal-700">
-                  {activeCompany?.name?.charAt(0) ?? 'C'}
+      <div className="flex items-center gap-2">
+        <div className="relative" ref={dropdownRef}>
+          {companies.length > 0 ? (
+            <>
+              <button
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+                className="flex items-center gap-2 px-3 py-2 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors text-sm"
+              >
+                {activeCompany?.logo_url ? (
+                  <img src={activeCompany.logo_url} alt="" className="w-5 h-5 rounded object-cover" />
+                ) : (
+                  <div className="w-5 h-5 rounded bg-teal-100 flex items-center justify-center text-[10px] font-bold text-teal-700">
+                    {activeCompany?.name?.charAt(0) ?? 'C'}
+                  </div>
+                )}
+                <span className="font-medium text-gray-700 max-w-[120px] truncate">
+                  {activeCompany?.name ?? 'Select Company'}
+                </span>
+                <ChevronDown size={14} className="text-gray-400" />
+              </button>
+              {dropdownOpen && (
+                <div className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-lg border border-gray-100 py-1 z-50">
+                  {companies.map(company => (
+                    <button
+                      key={company.id}
+                      onClick={() => {
+                        setActiveCompany(company.id);
+                        setDropdownOpen(false);
+                      }}
+                      className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-gray-50 transition-colors ${
+                        company.id === activeCompanyId ? 'bg-teal-50 text-teal-700' : 'text-gray-700'
+                      }`}
+                    >
+                      {company.logo_url ? (
+                        <img src={company.logo_url} alt="" className="w-6 h-6 rounded object-cover" />
+                      ) : (
+                        <div className="w-6 h-6 rounded bg-teal-100 flex items-center justify-center text-xs font-bold text-teal-700">
+                          {company.name.charAt(0)}
+                        </div>
+                      )}
+                      <span className="truncate">{company.name}</span>
+                    </button>
+                  ))}
                 </div>
               )}
-              <span className="font-medium text-gray-700 max-w-[120px] truncate">
-                {activeCompany?.name ?? 'Select Company'}
-              </span>
-              <ChevronDown size={14} className="text-gray-400" />
-            </button>
-            {dropdownOpen && (
-              <div className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-lg border border-gray-100 py-1 z-50">
-                {companies.map(company => (
-                  <button
-                    key={company.id}
-                    onClick={() => {
-                      setActiveCompany(company.id);
-                      setDropdownOpen(false);
-                    }}
-                    className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-gray-50 transition-colors ${
-                      company.id === activeCompanyId ? 'bg-teal-50 text-teal-700' : 'text-gray-700'
-                    }`}
-                  >
-                    {company.logo_url ? (
-                      <img src={company.logo_url} alt="" className="w-6 h-6 rounded object-cover" />
-                    ) : (
-                      <div className="w-6 h-6 rounded bg-teal-100 flex items-center justify-center text-xs font-bold text-teal-700">
-                        {company.name.charAt(0)}
-                      </div>
-                    )}
-                    <span className="truncate">{company.name}</span>
-                  </button>
-                ))}
+            </>
+          ) : (
+            <div className="flex items-center gap-2 px-3 py-2 text-sm text-gray-400">
+              <Plus size={14} />
+              <span>Add a company to get started</span>
+            </div>
+          )}
+        </div>
+
+        <div className="relative" ref={userMenuRef}>
+          <button
+            onClick={() => setUserMenuOpen(!userMenuOpen)}
+            className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-gray-50 transition-colors"
+          >
+            <div className="w-8 h-8 rounded-full bg-teal-600 flex items-center justify-center text-sm font-semibold text-white">
+              {user?.name?.charAt(0).toUpperCase() ?? <UserIcon size={16} />}
+            </div>
+            <ChevronDown size={14} className="text-gray-400 hidden sm:block" />
+          </button>
+          {userMenuOpen && (
+            <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-gray-100 py-1 z-50">
+              <div className="px-4 py-3 border-b border-gray-100">
+                <p className="text-sm font-medium text-gray-900 truncate">{user?.name}</p>
+                <p className="text-xs text-gray-500 truncate">{user?.email}</p>
               </div>
-            )}
-          </>
-        ) : (
-          <div className="flex items-center gap-2 px-3 py-2 text-sm text-gray-400">
-            <Plus size={14} />
-            <span>Add a company to get started</span>
-          </div>
-        )}
+              <button
+                onClick={() => {
+                  setUserMenuOpen(false);
+                  logout();
+                }}
+                className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+              >
+                <LogOut size={16} className="text-gray-400" />
+                Sign out
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </header>
   );
