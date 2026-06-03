@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Receipt, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAuthStore } from '../store/authStore';
+import AuthShell from '../components/auth/AuthShell';
 
 export default function RegisterPage() {
   const register = useAuthStore(s => s.register);
@@ -24,7 +25,7 @@ export default function RegisterPage() {
     setSubmitting(true);
     try {
       await register(name.trim(), email.trim(), password);
-      navigate('/', { replace: true });
+      navigate('/dashboard', { replace: true });
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Registration failed');
     } finally {
@@ -33,69 +34,63 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-8">
-      <div className="w-full max-w-sm">
-        <div className="flex flex-col items-center mb-8">
-          <div className="w-12 h-12 rounded-xl bg-teal-600 flex items-center justify-center mb-3">
-            <Receipt size={26} className="text-white" />
-          </div>
-          <h1 className="text-xl font-bold text-gray-900">Create your account</h1>
-          <p className="text-sm text-gray-500 mt-1">Start managing your invoices with InvoiceBD</p>
-        </div>
-
-        <form onSubmit={handleSubmit} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-4">
-          <div>
-            <label className={labelClass}>Full name</label>
-            <input
-              className={inputClass}
-              value={name}
-              onChange={e => setName(e.target.value)}
-              required
-              autoComplete="name"
-              placeholder="Jane Doe"
-            />
-          </div>
-          <div>
-            <label className={labelClass}>Email</label>
-            <input
-              className={inputClass}
-              type="email"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              required
-              autoComplete="email"
-              placeholder="you@example.com"
-            />
-          </div>
-          <div>
-            <label className={labelClass}>Password</label>
-            <input
-              className={inputClass}
-              type="password"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              required
-              autoComplete="new-password"
-              placeholder="At least 6 characters"
-            />
-          </div>
-          <button
-            type="submit"
-            disabled={submitting}
-            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-teal-600 text-white text-sm font-medium hover:bg-teal-700 transition-colors disabled:opacity-60"
-          >
-            {submitting && <Loader2 size={16} className="animate-spin" />}
-            Create account
-          </button>
-        </form>
-
-        <p className="text-center text-sm text-gray-500 mt-6">
+    <AuthShell
+      title="Create your account"
+      subtitle="Start managing your invoices with InvoiceBD"
+      footer={
+        <>
           Already have an account?{' '}
           <Link to="/login" className="font-medium text-teal-600 hover:text-teal-700">
             Sign in
           </Link>
-        </p>
-      </div>
-    </div>
+        </>
+      }
+    >
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label className={labelClass}>Full name</label>
+          <input
+            className={inputClass}
+            value={name}
+            onChange={e => setName(e.target.value)}
+            required
+            autoComplete="name"
+            placeholder="Jane Doe"
+          />
+        </div>
+        <div>
+          <label className={labelClass}>Email</label>
+          <input
+            className={inputClass}
+            type="email"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            required
+            autoComplete="email"
+            placeholder="you@example.com"
+          />
+        </div>
+        <div>
+          <label className={labelClass}>Password</label>
+          <input
+            className={inputClass}
+            type="password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            required
+            autoComplete="new-password"
+            placeholder="At least 6 characters"
+          />
+        </div>
+        <button
+          type="submit"
+          disabled={submitting}
+          className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-teal-600 text-white text-sm font-medium hover:bg-teal-700 transition-colors disabled:opacity-60"
+        >
+          {submitting && <Loader2 size={16} className="animate-spin" />}
+          Create account
+        </button>
+      </form>
+    </AuthShell>
   );
 }
