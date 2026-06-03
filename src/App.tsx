@@ -12,6 +12,8 @@ import InvoiceFormPage from './pages/InvoiceFormPage';
 import InvoicePreviewPage from './pages/InvoicePreviewPage';
 import ItemLibraryPage from './pages/ItemLibraryPage';
 import ReportsPage from './pages/ReportsPage';
+import SettingsPage from './pages/SettingsPage';
+import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import { useAuthStore } from './store/authStore';
@@ -38,19 +40,22 @@ function App() {
     <BrowserRouter>
       <Toaster position="top-right" richColors />
       <Routes>
-        <Route path="/login" element={authed ? <Navigate to="/" replace /> : <LoginPage />} />
-        <Route path="/register" element={authed ? <Navigate to="/" replace /> : <RegisterPage />} />
-        <Route path="/" element={<RequireAuth><Layout /></RequireAuth>}>
-          <Route index element={<Dashboard />} />
-          <Route path="companies" element={<CompaniesPage />} />
-          <Route path="clients" element={<ClientsPage />} />
-          <Route path="invoices" element={<InvoicesPage />} />
-          <Route path="invoices/new" element={<InvoiceFormPage />} />
-          <Route path="invoices/:id/edit" element={<InvoiceFormPage />} />
-          <Route path="invoices/:id/preview" element={<InvoicePreviewPage />} />
-          <Route path="item-library" element={<ItemLibraryPage />} />
-          <Route path="reports" element={<ReportsPage />} />
+        <Route path="/" element={authed ? <Navigate to="/dashboard" replace /> : <LandingPage />} />
+        <Route path="/login" element={authed ? <Navigate to="/dashboard" replace /> : <LoginPage />} />
+        <Route path="/register" element={authed ? <Navigate to="/dashboard" replace /> : <RegisterPage />} />
+        <Route element={<RequireAuth><Layout /></RequireAuth>}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/companies" element={<CompaniesPage />} />
+          <Route path="/clients" element={<ClientsPage />} />
+          <Route path="/invoices" element={<InvoicesPage />} />
+          <Route path="/invoices/new" element={<InvoiceFormPage />} />
+          <Route path="/invoices/:id/edit" element={<InvoiceFormPage />} />
+          <Route path="/invoices/:id/preview" element={<InvoicePreviewPage />} />
+          <Route path="/item-library" element={<ItemLibraryPage />} />
+          <Route path="/reports" element={<ReportsPage />} />
+          <Route path="/settings" element={<SettingsPage />} />
         </Route>
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
   );

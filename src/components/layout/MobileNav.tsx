@@ -9,7 +9,7 @@ import {
 import { cn } from '../../lib/utils';
 
 const navItems = [
-  { to: '/', icon: LayoutDashboard, label: 'Home' },
+  { to: '/dashboard', icon: LayoutDashboard, label: 'Home' },
   { to: '/companies', icon: Building2, label: 'Companies' },
   { to: '/clients', icon: Users, label: 'Clients' },
   { to: '/invoices', icon: FileText, label: 'Invoices' },
@@ -24,7 +24,7 @@ export default function MobileNav() {
           <NavLink
             key={item.to}
             to={item.to}
-            end={item.to === '/'}
+            end={item.to === '/dashboard'}
             className={({ isActive }) =>
               cn(
                 'flex flex-col items-center gap-0.5 px-3 py-2 rounded-lg text-xs font-medium transition-colors min-w-[56px]',
