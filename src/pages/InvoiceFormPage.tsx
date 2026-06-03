@@ -139,7 +139,6 @@ export default function InvoiceFormPage() {
   const handleSave = async (status: InvoiceStatus = 'draft') => {
     if (!activeCompanyId) { toast.error('Select a company'); return; }
     if (!invoiceNumber) { toast.error('Invoice number is required'); return; }
-    console.log('handleSave called with items:', items);
     setSaving(true);
     const invoiceData = {
       company_id: activeCompanyId,
@@ -174,7 +173,6 @@ export default function InvoiceFormPage() {
       line_total: item.line_total,
       sort_order: i,
     }));
-    console.log('Mapped itemsData:', itemsData);
     if (isEditing && id) {
       await updateInvoice(id, invoiceData, itemsData);
       toast.success('Invoice updated');
