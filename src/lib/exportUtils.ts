@@ -49,25 +49,32 @@ export async function exportToImage(element: HTMLElement, filename: string, form
 export function printInvoice(element: HTMLElement) {
   const printWindow = window.open('', '_blank');
   if (!printWindow) return;
+  // Copy the app's stylesheets (Tailwind + fonts) into the print window so the
+  // invoice templates render with their real styling instead of plain HTML.
+  const styles = Array.from(
+    document.querySelectorAll('style, link[rel="stylesheet"]')
+  )
+    .map(node => node.outerHTML)
+    .join('\n');
+
   printWindow.document.write(`
     <!DOCTYPE html>
     <html>
     <head>
       <title>Print Invoice</title>
+      ${styles}
       <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', system-ui, sans-serif; }
-        @media print {
-          body { margin: 0; padding: 0; }
-          @page { margin: 10mm; size: A4; }
-        }
+        body { margin: 0; padding: 0; background: #fff; }
+        @page { margin: 10mm; size: A4; }
       </style>
-      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     </head>
     <body>
       ${element.outerHTML}
       <script>
-        window.onload = function() { window.print(); window.close(); };
+        // Give the stylesheets a moment to apply before printing.
+        window.onload = function() {
+          setTimeout(function() { window.print(); window.close(); }, 350);
+        };
       </script>
     </body>
     </html>
