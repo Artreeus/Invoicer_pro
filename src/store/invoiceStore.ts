@@ -40,7 +40,7 @@ export const useInvoiceStore = create<InvoiceState>((set, get) => ({
       return newInvoice;
     } catch (err) {
       console.error('Error creating invoice:', err);
-      toast.error('Failed to create invoice');
+      toast.error(err instanceof Error ? err.message : 'Failed to create invoice');
       return null;
     }
   },
@@ -55,7 +55,7 @@ export const useInvoiceStore = create<InvoiceState>((set, get) => ({
       }));
     } catch (err) {
       console.error('Error updating invoice:', err);
-      toast.error('Failed to update invoice');
+      toast.error(err instanceof Error ? err.message : 'Failed to update invoice');
     }
   },
 

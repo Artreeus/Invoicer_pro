@@ -19,6 +19,8 @@ interface AuthState {
   initialize: () => Promise<void>;
   login: (email: string, password: string) => Promise<void>;
   register: (name: string, email: string, password: string) => Promise<void>;
+  updateProfile: (updates: { name?: string; email?: string }) => Promise<void>;
+  changePassword: (currentPassword: string, newPassword: string) => Promise<void>;
   logout: () => void;
 }
 
@@ -67,6 +69,18 @@ export const useAuthStore = create<AuthState>((set) => ({
     setAuthToken(token);
     resetDataStores();
     set({ user, status: 'authenticated' });
+  },
+
+  updateProfile: async (updates) => {
+    const user = await api.patch<User>('/auth/me', updates);
+    set({ user });
+  },
+
+  changePassword: async (currentPassword, newPassword) => {
+    await api.post('/auth/change-password', {
+      current_password: currentPassword,
+      new_password: newPassword,
+    });
   },
 
   logout: () => {
