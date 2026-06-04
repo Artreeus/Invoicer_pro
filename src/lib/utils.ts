@@ -84,12 +84,12 @@ export function generateId(): string {
 
 export function statusColor(status: string): string {
   switch (status) {
-    case 'draft': return 'bg-gray-100 text-gray-700';
-    case 'sent': return 'bg-blue-100 text-blue-700';
-    case 'paid': return 'bg-emerald-100 text-emerald-700';
-    case 'overdue': return 'bg-red-100 text-red-700';
-    case 'cancelled': return 'bg-orange-100 text-orange-700';
-    default: return 'bg-gray-100 text-gray-700';
+    case 'draft': return 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-200';
+    case 'sent': return 'bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-300';
+    case 'paid': return 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-300';
+    case 'overdue': return 'bg-red-100 text-red-700 dark:bg-red-500/20 dark:text-red-300';
+    case 'cancelled': return 'bg-orange-100 text-orange-700 dark:bg-orange-500/20 dark:text-orange-300';
+    default: return 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-200';
   }
 }
 
