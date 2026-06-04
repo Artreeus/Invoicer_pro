@@ -76,7 +76,7 @@ export default function InvoicePreviewPage() {
 
   if (!invoice) {
     return (
-      <div className="p-8 text-center text-gray-500">Invoice not found.</div>
+      <div className="p-8 text-center text-gray-500 dark:text-gray-400">Invoice not found.</div>
     );
   }
 
@@ -87,18 +87,18 @@ export default function InvoicePreviewPage() {
       <div className="max-w-5xl mx-auto">
         <div className="flex items-center justify-between mb-6 no-print">
           <div className="flex items-center gap-3">
-            <button onClick={() => navigate('/invoices')} className="p-2 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors">
+            <button onClick={() => navigate('/invoices')} className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
               <ArrowLeft size={20} />
             </button>
             <div>
-              <h1 className="text-xl font-bold text-gray-900">Invoice Preview</h1>
-              <p className="text-sm text-gray-500">{invoice.invoice_number}</p>
+              <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100">Invoice Preview</h1>
+              <p className="text-sm text-gray-500 dark:text-gray-400">{invoice.invoice_number}</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
             <button
               onClick={() => navigate(`/invoices/${id}/edit`)}
-              className="flex items-center gap-2 px-3 py-2 border border-gray-200 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors"
+              className="flex items-center gap-2 px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
             >
               <Pencil size={16} /> Edit
             </button>
@@ -113,18 +113,18 @@ export default function InvoicePreviewPage() {
                 <ChevronDown size={14} />
               </button>
               {exportMenuOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-1 z-50">
-                  <button onClick={handleExportPDF} className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-gray-100 dark:border-gray-800 py-1 z-50">
+                  <button onClick={handleExportPDF} className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
                     <FileDown size={16} className="text-red-500" /> Download PDF
                   </button>
-                  <button onClick={handleExportPNG} className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                  <button onClick={handleExportPNG} className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
                     <Image size={16} className="text-blue-500" /> Download PNG
                   </button>
-                  <button onClick={handleExportJPG} className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                  <button onClick={handleExportJPG} className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
                     <Image size={16} className="text-green-500" /> Download JPG
                   </button>
-                  <div className="h-px bg-gray-100 my-1" />
-                  <button onClick={handlePrint} className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                  <div className="h-px bg-gray-100 dark:bg-gray-800 my-1" />
+                  <button onClick={handlePrint} className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
                     <Printer size={16} className="text-gray-500" /> Print
                   </button>
                 </div>

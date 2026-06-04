@@ -95,8 +95,8 @@ export default function InvoicesPage() {
     <div className="p-4 lg:p-8 max-w-6xl mx-auto">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Invoices</h1>
-          <p className="text-sm text-gray-500 mt-1">{invoices.length} total invoices</p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Invoices</h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{invoices.length} total invoices</p>
         </div>
         <button
           onClick={() => navigate('/invoices/new')}
@@ -109,22 +109,22 @@ export default function InvoicesPage() {
 
       <div className="flex flex-col sm:flex-row gap-3 mb-4">
         <div className="relative flex-1">
-          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500" />
           <input
             type="text"
             placeholder="Search by invoice number or client..."
             value={search}
             onChange={e => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500"
+            className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100 dark:placeholder-gray-500"
           />
         </div>
-        <div className="flex gap-1 p-1 bg-gray-100 rounded-lg overflow-x-auto">
+        <div className="flex gap-1 p-1 bg-gray-100 dark:bg-gray-800 rounded-lg overflow-x-auto">
           {STATUS_OPTIONS.map(opt => (
             <button
               key={opt.value}
               onClick={() => setStatusFilter(opt.value)}
               className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all whitespace-nowrap ${
-                statusFilter === opt.value ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'
+                statusFilter === opt.value ? 'bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
               }`}
             >
               {opt.label}
@@ -136,10 +136,10 @@ export default function InvoicesPage() {
       {loading ? (
         <div className="space-y-3">
           {[1, 2, 3, 4].map(i => (
-            <div key={i} className="bg-white rounded-xl border border-gray-100 p-4 animate-pulse">
+            <div key={i} className="bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 p-4 animate-pulse">
               <div className="flex items-center justify-between">
-                <div><div className="h-4 bg-gray-200 rounded w-24 mb-2" /><div className="h-3 bg-gray-100 rounded w-40" /></div>
-                <div className="h-6 bg-gray-100 rounded w-20" />
+                <div><div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-24 mb-2" /><div className="h-3 bg-gray-100 dark:bg-gray-700 rounded w-40" /></div>
+                <div className="h-6 bg-gray-100 dark:bg-gray-700 rounded w-20" />
               </div>
             </div>
           ))}
@@ -160,48 +160,48 @@ export default function InvoicesPage() {
           {filtered.map(inv => (
             <div
               key={inv.id}
-              className="bg-white rounded-xl border border-gray-100 p-4 hover:shadow-sm transition-all group"
+              className="bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 p-4 hover:shadow-sm transition-all group"
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4 min-w-0">
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="font-semibold text-gray-900 text-sm">{inv.invoice_number}</span>
+                      <span className="font-semibold text-gray-900 dark:text-gray-100 text-sm">{inv.invoice_number}</span>
                       <Badge className={statusColor(effectiveStatus(inv))}>
                         <span className="flex items-center gap-1">{statusIcon(effectiveStatus(inv))} {effectiveStatus(inv)}</span>
                       </Badge>
                     </div>
-                    <div className="text-xs text-gray-500 mt-0.5">
+                    <div className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
                       {(inv.client as any)?.name ?? 'No client'} &middot; {formatDate(inv.issue_date)}
                       {dueLabel(inv)}
                     </div>
                   </div>
                 </div>
                 <div className="flex items-center gap-4">
-                  <span className="font-semibold text-gray-900 text-sm hidden sm:block">
+                  <span className="font-semibold text-gray-900 dark:text-gray-100 text-sm hidden sm:block">
                     {formatCurrency(inv.grand_total, inv.currency)}
                   </span>
                   <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button onClick={() => navigate(`/invoices/${inv.id}/preview`)} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors" title="Preview">
+                    <button onClick={() => navigate(`/invoices/${inv.id}/preview`)} className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors" title="Preview">
                       <Eye size={14} />
                     </button>
-                    <button onClick={() => navigate(`/invoices/${inv.id}/edit`)} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors" title="Edit">
+                    <button onClick={() => navigate(`/invoices/${inv.id}/edit`)} className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors" title="Edit">
                       <Pencil size={14} />
                     </button>
-                    <button onClick={() => handleDuplicate(inv)} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors" title="Duplicate">
+                    <button onClick={() => handleDuplicate(inv)} className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors" title="Duplicate">
                       <Copy size={14} />
                     </button>
                     {inv.status === 'draft' && (
-                      <button onClick={() => { updateInvoiceStatus(inv.id, 'sent'); toast.success('Marked as sent'); }} className="p-1.5 rounded-lg hover:bg-blue-50 text-gray-400 hover:text-blue-600 transition-colors" title="Mark as Sent">
+                      <button onClick={() => { updateInvoiceStatus(inv.id, 'sent'); toast.success('Marked as sent'); }} className="p-1.5 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-500/10 text-gray-400 dark:text-gray-500 hover:text-blue-600 transition-colors" title="Mark as Sent">
                         <Send size={14} />
                       </button>
                     )}
                     {inv.status === 'sent' && (
-                      <button onClick={() => { updateInvoiceStatus(inv.id, 'paid'); toast.success('Marked as paid'); }} className="p-1.5 rounded-lg hover:bg-emerald-50 text-gray-400 hover:text-emerald-600 transition-colors" title="Mark as Paid">
+                      <button onClick={() => { updateInvoiceStatus(inv.id, 'paid'); toast.success('Marked as paid'); }} className="p-1.5 rounded-lg hover:bg-emerald-50 dark:hover:bg-emerald-500/10 text-gray-400 dark:text-gray-500 hover:text-emerald-600 transition-colors" title="Mark as Paid">
                         <CheckCircle size={14} />
                       </button>
                     )}
-                    <button onClick={() => handleDelete(inv)} className="p-1.5 rounded-lg hover:bg-red-50 text-gray-400 hover:text-red-500 transition-colors" title="Delete">
+                    <button onClick={() => handleDelete(inv)} className="p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-500/10 text-gray-400 dark:text-gray-500 hover:text-red-500 transition-colors" title="Delete">
                       <Trash2 size={14} />
                     </button>
                   </div>
