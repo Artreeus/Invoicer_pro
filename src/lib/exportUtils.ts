@@ -1,18 +1,17 @@
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
-
 export async function exportToPDF(element: HTMLElement, filename: string) {
+  const [{ default: html2canvas }, { default: jsPDF }] = await Promise.all([
+    import('html2canvas'),
+    import('jspdf'),
+  ]);
+
   const canvas = await html2canvas(element, {
     useCORS: true,
     logging: false,
     backgroundColor: '#ffffff',
-  } as any);
+  } as Parameters<typeof html2canvas>[1]);
+
   const imgData = canvas.toDataURL('image/png');
-  const pdf = new jsPDF({
-    orientation: 'portrait',
-    unit: 'mm',
-    format: 'a4',
-  });
+  const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
   const pdfWidth = pdf.internal.pageSize.getWidth();
   const pdfHeight = pdf.internal.pageSize.getHeight();
   const imgWidth = pdfWidth;
@@ -20,7 +19,6 @@ export async function exportToPDF(element: HTMLElement, filename: string) {
 
   let heightLeft = imgHeight;
   let position = 0;
-
   pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
   heightLeft -= pdfHeight;
 
@@ -34,12 +32,15 @@ export async function exportToPDF(element: HTMLElement, filename: string) {
   pdf.save(`${filename}.pdf`);
 }
 
-export async function exportToImage(element: HTMLElement, filename: string, format: 'png' | 'jpeg' = 'png') {
+export async function exportToImage(
+  element: HTMLElement, filename: string, format: 'png' | 'jpeg' = 'png',
+) {
+  const { default: html2canvas } = await import('html2canvas');
   const canvas = await html2canvas(element, {
     useCORS: true,
     logging: false,
     backgroundColor: '#ffffff',
-  } as any);
+  } as Parameters<typeof html2canvas>[1]);
   const link = document.createElement('a');
   link.download = `${filename}.${format}`;
   link.href = canvas.toDataURL(`image/${format}`, 0.95);
@@ -49,11 +50,7 @@ export async function exportToImage(element: HTMLElement, filename: string, form
 export function printInvoice(element: HTMLElement) {
   const printWindow = window.open('', '_blank');
   if (!printWindow) return;
-  // Copy the app's stylesheets (Tailwind + fonts) into the print window so the
-  // invoice templates render with their real styling instead of plain HTML.
-  const styles = Array.from(
-    document.querySelectorAll('style, link[rel="stylesheet"]')
-  )
+  const styles = Array.from(document.querySelectorAll('style, link[rel="stylesheet"]'))
     .map(node => node.outerHTML)
     .join('\n');
 
@@ -71,7 +68,6 @@ export function printInvoice(element: HTMLElement) {
     <body>
       ${element.outerHTML}
       <script>
-        // Give the stylesheets a moment to apply before printing.
         window.onload = function() {
           setTimeout(function() { window.print(); window.close(); }, 350);
         };
