@@ -14,6 +14,7 @@ const columns = [
   {
     title: 'Resources',
     links: [
+      { to: '/templates', label: 'Templates' },
       { to: '/blog', label: 'Blog' },
       { to: '/about', label: 'About us' },
       { to: '/contact', label: 'Contact' },

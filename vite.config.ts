@@ -15,6 +15,7 @@ const ARTICLE_SLUGS = [
 const PUBLIC_PATHS = [
   '/',
   '/invoice-generator',
+  '/templates',
   '/about',
   '/contact',
   '/privacy',
@@ -72,6 +73,7 @@ function seoAndAds(client: string, siteUrl: string): Plugin {
       const priorities: Record<string, string> = {
         '/': '1.0',
         '/invoice-generator': '0.9',
+        '/templates': '0.85',
         '/about': '0.7',
         '/contact': '0.6',
         '/blog': '0.8',
@@ -83,6 +85,7 @@ function seoAndAds(client: string, siteUrl: string): Plugin {
       const changefreqs: Record<string, string> = {
         '/': 'weekly',
         '/invoice-generator': 'weekly',
+        '/templates': 'monthly',
         '/about': 'monthly',
         '/contact': 'monthly',
         '/blog': 'weekly',

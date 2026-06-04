@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useId } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import {
   Plus, Trash2, Image as ImageIcon, Printer, FileDown, X,
   Sparkles, ArrowRight, Eye, Loader2, ChevronDown, ChevronUp,
@@ -40,23 +40,23 @@ const FAQ_ITEMS = [
   },
   {
     q: 'Can I add VAT to my invoice?',
-    a: 'Yes. Each line item has a VAT rate selector (0 %, 5 %, 7.5 %, 10 %, 15 %). The totals section automatically calculates VAT and shows a grand total.',
+    a: 'Yes. Each line item has a VAT rate selector (0%, 5%, 7.5%, 10%, 15%). The totals section automatically calculates VAT and shows a grand total.',
   },
   {
     q: 'What currencies does the invoice generator support?',
-    a: 'The generator supports BDT (Bangladeshi Taka), USD, EUR, and GBP. Select your preferred currency from the Invoice details section.',
+    a: 'The generator supports BDT, USD, EUR, and GBP. Select your preferred currency in the Invoice Details section.',
   },
   {
     q: 'Can I download my invoice as a PDF?',
-    a: 'Yes. Click "Preview & Download", then click the PDF button in the preview toolbar. You can also download as a PNG image or print directly.',
+    a: 'Yes. Click "Preview & Download", then hit the PDF button. You can also export as PNG or print directly.',
   },
   {
-    q: 'Do I need to sign up to use the invoice generator?',
-    a: 'No sign-up is required for the free generator. To save invoices, manage clients, and track payments, you can create a free InvoiceBD account.',
+    q: 'Do I need to sign up?',
+    a: 'No sign-up is required for the free generator. Create a free account to save invoices, manage clients, and track payments.',
   },
   {
     q: 'Can I include my BIN and TIN on the invoice?',
-    a: 'Yes. The "Your details" section has dedicated fields for BIN (Business Identification Number) and TIN (Taxpayer Identification Number), which appear on the generated invoice.',
+    a: 'Yes — the Your Details section has dedicated BIN and TIN fields that appear on the generated invoice.',
   },
 ];
 
@@ -71,6 +71,8 @@ const PAGE_SCHEMA = {
 };
 
 export default function InvoiceGeneratorPage() {
+  const [searchParams] = useSearchParams();
+
   useSeo(
     'Free Invoice Generator Online | Create Professional PDF Invoices',
     'Create professional invoices online for free. Generate PDF invoices instantly with tax calculations, multiple currencies, and professional templates. No sign-up required.',
@@ -97,7 +99,7 @@ export default function InvoiceGeneratorPage() {
   const [issueDate, setIssueDate] = useState(todayStr());
   const [dueDate, setDueDate] = useState('');
   const [currency, setCurrency] = useState('BDT');
-  const [templateId, setTemplateId] = useState('corporate');
+  const [templateId, setTemplateId] = useState(searchParams.get('template') ?? 'corporate');
   const [brandColor, setBrandColor] = useState('#0d9488');
   // Items + footer
   const [items, setItems] = useState<InvoiceItem[]>([emptyItem()]);
@@ -107,22 +109,6 @@ export default function InvoiceGeneratorPage() {
 
   const [exporting, setExporting] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
-
-  // Right-column live preview
-  const previewContainerRef = useRef<HTMLDivElement>(null);
-  const [previewScale, setPreviewScale] = useState(0);
-
-  useEffect(() => {
-    const el = previewContainerRef.current;
-    if (!el) return;
-    const update = () => setPreviewScale(Math.min(1, el.clientWidth / 794));
-    update();
-    const ro = new ResizeObserver(update);
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, []);
-
-  // Modal export ref
   const previewRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -185,7 +171,8 @@ export default function InvoiceGeneratorPage() {
   };
 
   return (
-    <div className="max-w-[1440px] mx-auto px-4 lg:px-6 py-10 lg:py-14">
+    <div className="max-w-5xl mx-auto px-4 lg:px-6 py-10 lg:py-14">
+
       {/* Page header */}
       <div className="text-center max-w-2xl mx-auto mb-8">
         <span className="inline-flex items-center gap-1.5 text-xs font-medium text-teal-700 dark:text-teal-300 bg-teal-100 dark:bg-teal-500/20 px-3 py-1 rounded-full">
@@ -199,8 +186,8 @@ export default function InvoiceGeneratorPage() {
         </p>
       </div>
 
-      {/* Sticky action bar — mobile only */}
-      <div className="sticky top-16 z-30 lg:hidden -mx-4 px-4 py-3 mb-6 bg-white/90 dark:bg-gray-950/90 backdrop-blur border-y border-gray-100 dark:border-gray-800 flex items-center justify-between">
+      {/* Sticky action bar */}
+      <div className="sticky top-16 z-30 -mx-4 lg:-mx-6 px-4 lg:px-6 py-3 mb-6 bg-white/90 dark:bg-gray-950/90 backdrop-blur border-y border-gray-100 dark:border-gray-800 flex items-center justify-between">
         <div className="text-sm text-gray-500 dark:text-gray-400">
           Total: <span className="font-bold text-gray-900 dark:text-gray-100">{formatCurrency(totals.grandTotal, currency)}</span>
         </div>
@@ -212,12 +199,11 @@ export default function InvoiceGeneratorPage() {
         </button>
       </div>
 
-      {/* Two-column layout */}
-      <div className="flex flex-col lg:flex-row gap-8 items-start">
+      {/* ── Two-column form grid ────────────────────── */}
+      <div className="space-y-4">
 
-        {/* ── Left: Form ─────────────────────────────── */}
-        <div className="w-full lg:w-[480px] flex-none space-y-4">
-
+        {/* Row 1: From | To — side by side */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <Card title="Your details">
             <Field label="Logo" id="field-logo">
               <LocalImageUpload value={bizLogo} onChange={setBizLogo} />
@@ -266,213 +252,172 @@ export default function InvoiceGeneratorPage() {
                 onChange={e => setClientEmail(e.target.value)} />
             </Field>
           </Card>
+        </div>
 
-          <Card title="Invoice details">
-            <div className="grid grid-cols-2 gap-3">
-              <Field label="Invoice number" id="inv-number">
-                <input id="inv-number" className={inputClass} value={invoiceNumber}
-                  onChange={e => setInvoiceNumber(e.target.value)} />
-              </Field>
-              <Field label="Currency" id="inv-currency">
-                <select id="inv-currency" className={inputClass} value={currency}
-                  onChange={e => setCurrency(e.target.value)}>
-                  {CURRENCIES.map(c => <option key={c.code} value={c.code}>{c.symbol} {c.code}</option>)}
-                </select>
-              </Field>
-              <Field label="Issue date" id="inv-issue">
-                <input id="inv-issue" type="date" className={inputClass} value={issueDate}
-                  onChange={e => setIssueDate(e.target.value)} />
-              </Field>
-              <Field label="Due date" id="inv-due">
-                <input id="inv-due" type="date" className={inputClass} value={dueDate}
-                  onChange={e => setDueDate(e.target.value)} />
-              </Field>
-            </div>
-            <div className="grid grid-cols-2 gap-3">
+        {/* Row 2: Invoice details — full width */}
+        <Card title="Invoice details">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+            <Field label="Invoice number" id="inv-number">
+              <input id="inv-number" className={inputClass} value={invoiceNumber}
+                onChange={e => setInvoiceNumber(e.target.value)} />
+            </Field>
+            <Field label="Currency" id="inv-currency">
+              <select id="inv-currency" className={inputClass} value={currency}
+                onChange={e => setCurrency(e.target.value)}>
+                {CURRENCIES.map(c => <option key={c.code} value={c.code}>{c.symbol} {c.code}</option>)}
+              </select>
+            </Field>
+            <Field label="Issue date" id="inv-issue">
+              <input id="inv-issue" type="date" className={inputClass} value={issueDate}
+                onChange={e => setIssueDate(e.target.value)} />
+            </Field>
+            <Field label="Due date" id="inv-due">
+              <input id="inv-due" type="date" className={inputClass} value={dueDate}
+                onChange={e => setDueDate(e.target.value)} />
+            </Field>
+          </div>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-3">
+            <div className="lg:col-span-3">
               <Field label="Template" id="inv-template">
                 <select id="inv-template" className={inputClass} value={templateId}
                   onChange={e => setTemplateId(e.target.value)}>
                   {INVOICE_TEMPLATES.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
                 </select>
               </Field>
-              <Field label="Brand colour" id="inv-color">
-                <input id="inv-color" type="color" value={brandColor}
-                  onChange={e => setBrandColor(e.target.value)}
-                  aria-label="Brand colour picker"
-                  className="w-full h-[38px] px-1 py-1 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 cursor-pointer" />
-              </Field>
             </div>
-          </Card>
+            <Field label="Brand colour" id="inv-color">
+              <input id="inv-color" type="color" value={brandColor}
+                onChange={e => setBrandColor(e.target.value)}
+                aria-label="Brand colour picker"
+                className="w-full h-[38px] px-1 py-1 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 cursor-pointer" />
+            </Field>
+          </div>
+          <p className="mt-2 text-xs text-gray-400 dark:text-gray-500">
+            Browse all designs on the{' '}
+            <Link to="/templates" className="text-teal-600 dark:text-teal-400 hover:underline">
+              Templates page
+            </Link>
+          </p>
+        </Card>
 
-          <Card title="Items">
-            <div className="space-y-3" role="list" aria-label="Invoice items">
-              {items.map((item, i) => (
-                <div key={item.id} role="listitem"
-                  className="rounded-lg border border-gray-100 dark:border-gray-800 p-3 space-y-2">
-                  <div className="flex gap-2">
-                    <input
-                      className={`${inputClass} flex-1`}
-                      value={item.item_name}
-                      onChange={e => updateItem(i, 'item_name', e.target.value)}
-                      placeholder="Item or service"
-                      aria-label={`Item ${i + 1} name`}
-                    />
-                    <button
-                      onClick={() => setItems(prev => prev.length > 1 ? prev.filter((_, j) => j !== i) : prev)}
-                      aria-label={`Remove item ${i + 1}`}
-                      className="p-2 rounded-lg text-gray-300 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors"
-                    >
-                      <Trash2 size={16} aria-hidden="true" />
-                    </button>
-                  </div>
-                  <input className={inputClass} value={item.description}
-                    onChange={e => updateItem(i, 'description', e.target.value)}
-                    placeholder="Description (optional)"
-                    aria-label={`Item ${i + 1} description`}
+        {/* Row 3: Items — full width */}
+        <Card title="Items">
+          <div className="space-y-3" role="list" aria-label="Invoice items">
+            {items.map((item, i) => (
+              <div key={item.id} role="listitem"
+                className="rounded-lg border border-gray-100 dark:border-gray-800 p-3 space-y-2">
+                <div className="flex gap-2">
+                  <input
+                    className={`${inputClass} flex-1`}
+                    value={item.item_name}
+                    onChange={e => updateItem(i, 'item_name', e.target.value)}
+                    placeholder="Item or service"
+                    aria-label={`Item ${i + 1} name`}
                   />
-                  <div className="grid grid-cols-3 gap-2">
-                    <Field label="Qty" id={`item-qty-${i}`}>
-                      <input id={`item-qty-${i}`} type="number" min={0} className={inputClass}
-                        value={item.quantity} onChange={e => updateItem(i, 'quantity', Number(e.target.value))} />
-                    </Field>
+                  <button
+                    onClick={() => setItems(prev => prev.length > 1 ? prev.filter((_, j) => j !== i) : prev)}
+                    aria-label={`Remove item ${i + 1}`}
+                    className="p-2 rounded-lg text-gray-300 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors"
+                  >
+                    <Trash2 size={16} aria-hidden="true" />
+                  </button>
+                </div>
+                <input className={inputClass} value={item.description}
+                  onChange={e => updateItem(i, 'description', e.target.value)}
+                  placeholder="Description (optional)"
+                  aria-label={`Item ${i + 1} description`}
+                />
+                <div className="grid grid-cols-3 lg:grid-cols-5 gap-2">
+                  <Field label="Qty" id={`item-qty-${i}`}>
+                    <input id={`item-qty-${i}`} type="number" min={0} className={inputClass}
+                      value={item.quantity} onChange={e => updateItem(i, 'quantity', Number(e.target.value))} />
+                  </Field>
+                  <div className="lg:col-span-2">
                     <Field label={`Price (${sym})`} id={`item-price-${i}`}>
                       <input id={`item-price-${i}`} type="number" min={0} className={inputClass}
                         value={item.unit_price} onChange={e => updateItem(i, 'unit_price', Number(e.target.value))} />
                     </Field>
-                    <Field label="VAT %" id={`item-vat-${i}`}>
-                      <select id={`item-vat-${i}`} className={inputClass}
-                        value={item.vat_rate} onChange={e => updateItem(i, 'vat_rate', Number(e.target.value))}>
-                        {VAT_RATES.map(r => <option key={r} value={r}>{r}%</option>)}
-                      </select>
-                    </Field>
                   </div>
-                  <div className="text-right text-sm font-medium text-gray-700 dark:text-gray-300">
-                    {formatCurrency(item.line_total, currency)}
+                  <Field label="VAT %" id={`item-vat-${i}`}>
+                    <select id={`item-vat-${i}`} className={inputClass}
+                      value={item.vat_rate} onChange={e => updateItem(i, 'vat_rate', Number(e.target.value))}>
+                      {VAT_RATES.map(r => <option key={r} value={r}>{r}%</option>)}
+                    </select>
+                  </Field>
+                  <div className="flex items-end justify-end">
+                    <span className="text-sm font-semibold text-gray-700 dark:text-gray-300 py-2">
+                      {formatCurrency(item.line_total, currency)}
+                    </span>
                   </div>
                 </div>
-              ))}
-            </div>
-            <button
-              onClick={() => setItems(prev => [...prev, emptyItem()])}
-              className="mt-3 flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-teal-600 dark:text-teal-400 hover:bg-teal-50 dark:hover:bg-teal-500/10 rounded-lg transition-colors"
-            >
-              <Plus size={14} aria-hidden="true" /> Add item
-            </button>
-          </Card>
+              </div>
+            ))}
+          </div>
+          <button
+            onClick={() => setItems(prev => [...prev, emptyItem()])}
+            className="mt-3 flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-teal-600 dark:text-teal-400 hover:bg-teal-50 dark:hover:bg-teal-500/10 rounded-lg transition-colors"
+          >
+            <Plus size={14} aria-hidden="true" /> Add item
+          </button>
+        </Card>
 
-          <Card title="Notes & terms">
+        {/* Row 4: Notes & terms — full width */}
+        <Card title="Notes & terms">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
             <Field label="Notes" id="inv-notes">
-              <textarea id="inv-notes" className={inputClass} rows={2} value={notes}
+              <textarea id="inv-notes" className={inputClass} rows={3} value={notes}
                 onChange={e => setNotes(e.target.value)} placeholder="Notes for the client" />
             </Field>
             <Field label="Payment instructions" id="inv-payment">
-              <textarea id="inv-payment" className={inputClass} rows={2} value={paymentInstructions}
+              <textarea id="inv-payment" className={inputClass} rows={3} value={paymentInstructions}
                 onChange={e => setPaymentInstructions(e.target.value)}
                 placeholder="Bank account, bKash/Nagad/Rocket numbers…" />
             </Field>
             <Field label="Terms & conditions" id="inv-terms">
-              <textarea id="inv-terms" className={inputClass} rows={2} value={terms}
+              <textarea id="inv-terms" className={inputClass} rows={3} value={terms}
                 onChange={e => setTerms(e.target.value)} />
             </Field>
-          </Card>
-
-          {/* Mobile-only primary CTA */}
-          <button
-            onClick={() => setPreviewOpen(true)}
-            className="lg:hidden w-full flex items-center justify-center gap-2 px-4 py-3 bg-teal-600 text-white font-medium rounded-lg hover:bg-teal-700 transition-colors shadow-sm"
-          >
-            <Eye size={18} aria-hidden="true" /> Preview &amp; Download invoice
-          </button>
-
-          {/* Sign-up CTA */}
-          <div className="rounded-2xl bg-teal-50 dark:bg-teal-500/10 border border-teal-100 dark:border-teal-500/20 p-8 text-center">
-            <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
-              Want to save and manage your invoices?
-            </h2>
-            <p className="mt-2 text-gray-600 dark:text-gray-300 max-w-lg mx-auto">
-              Create a free account to store clients, reuse items, track payments and manage multiple companies.
-            </p>
-            <Link
-              to="/register"
-              className="mt-5 inline-flex items-center gap-2 bg-teal-600 text-white font-medium px-6 py-3 rounded-lg hover:bg-teal-700 transition-colors"
-            >
-              Create a free account <ArrowRight size={18} aria-hidden="true" />
-            </Link>
           </div>
+        </Card>
 
-          <AdUnit className="max-w-full" />
+        {/* Primary action */}
+        <button
+          onClick={() => setPreviewOpen(true)}
+          className="w-full flex items-center justify-center gap-2 px-4 py-3.5 bg-teal-600 text-white font-semibold rounded-xl hover:bg-teal-700 transition-colors shadow-sm text-base"
+        >
+          <Eye size={20} aria-hidden="true" /> Preview &amp; Download invoice
+        </button>
 
-          {/* FAQ */}
-          <section aria-labelledby="faq-heading" className="pt-4">
-            <h2 id="faq-heading" className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-              Frequently Asked Questions
-            </h2>
-            <div className="space-y-2">
-              {FAQ_ITEMS.map(item => <FaqItem key={item.q} q={item.q} a={item.a} />)}
-            </div>
-          </section>
+        {/* Sign-up CTA */}
+        <div className="rounded-2xl bg-teal-50 dark:bg-teal-500/10 border border-teal-100 dark:border-teal-500/20 p-8 text-center">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+            Want to save and manage your invoices?
+          </h2>
+          <p className="mt-2 text-gray-600 dark:text-gray-300 max-w-lg mx-auto">
+            Create a free account to store clients, reuse items, track payments and manage multiple companies.
+          </p>
+          <Link
+            to="/register"
+            className="mt-5 inline-flex items-center gap-2 bg-teal-600 text-white font-medium px-6 py-3 rounded-lg hover:bg-teal-700 transition-colors"
+          >
+            Create a free account <ArrowRight size={18} aria-hidden="true" />
+          </Link>
         </div>
 
-        {/* ── Right: Live preview (desktop) ──────────── */}
-        <div className="hidden lg:flex flex-col flex-1 sticky top-20 self-start gap-3 min-w-0">
-          {/* Preview toolbar */}
-          <div className="flex items-center justify-between gap-2">
-            <div className="flex items-center gap-3">
-              <span className="text-sm font-semibold text-gray-700 dark:text-gray-200">Live preview</span>
-              <span className="text-sm text-gray-400 dark:text-gray-500">
-                Total: <span className="font-bold text-gray-700 dark:text-gray-200">{formatCurrency(totals.grandTotal, currency)}</span>
-              </span>
-            </div>
-            <button
-              onClick={() => setPreviewOpen(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-teal-600 text-white text-sm font-medium rounded-lg hover:bg-teal-700 transition-colors shadow-sm"
-            >
-              <Eye size={16} aria-hidden="true" /> Preview &amp; Download
-            </button>
-          </div>
+        <AdUnit className="max-w-full" />
 
-          {/* Scaled template */}
-          <div
-            ref={previewContainerRef}
-            className="w-full overflow-hidden rounded-xl border border-gray-200 dark:border-gray-700 shadow-lg bg-white"
-            style={{ height: previewScale > 0 ? `${Math.ceil(1123 * previewScale)}px` : '500px' }}
-            aria-label="Invoice live preview"
-            aria-hidden="true"
-          >
-            {previewScale > 0 && (
-              <div
-                style={{
-                  transform: `scale(${previewScale})`,
-                  transformOrigin: 'top left',
-                  width: '794px',
-                  minHeight: '1123px',
-                }}
-              >
-                <TemplateComponent invoice={invoice} company={company} client={client} items={items} />
-              </div>
-            )}
+        {/* FAQ */}
+        <section aria-labelledby="faq-heading" className="pt-4">
+          <h2 id="faq-heading" className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+            Frequently Asked Questions
+          </h2>
+          <div className="space-y-2">
+            {FAQ_ITEMS.map(item => <FaqItem key={item.q} q={item.q} a={item.a} />)}
           </div>
-
-          {/* Template switcher under preview */}
-          <div className="flex flex-wrap gap-1.5">
-            {INVOICE_TEMPLATES.map(t => (
-              <button
-                key={t.id}
-                onClick={() => setTemplateId(t.id)}
-                className={`px-2.5 py-1 rounded-md text-xs font-medium border transition-colors ${
-                  templateId === t.id
-                    ? 'bg-teal-600 text-white border-teal-600'
-                    : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:border-teal-400 hover:text-teal-600 dark:hover:text-teal-300'
-                }`}
-              >
-                {t.name}
-              </button>
-            ))}
-          </div>
-        </div>
+        </section>
       </div>
 
-      {/* Export modal (full-size A4) */}
+      {/* Preview / export modal */}
       {previewOpen && (
         <div
           className="fixed inset-0 z-50 flex flex-col bg-black/50 backdrop-blur-sm"
@@ -485,17 +430,20 @@ export default function InvoiceGeneratorPage() {
             <div className="flex items-center gap-2 flex-1 sm:flex-none justify-end">
               <ExportButton
                 onClick={() => runExport(() => exportToPDF(previewRef.current!, filename))}
-                disabled={exporting} icon={<FileDown size={15} className="text-red-500" aria-hidden="true" />}
+                disabled={exporting}
+                icon={<FileDown size={15} className="text-red-500" aria-hidden="true" />}
                 label="PDF" busy={exporting}
               />
               <ExportButton
                 onClick={() => runExport(() => exportToImage(previewRef.current!, filename, 'png'))}
-                disabled={exporting} icon={<ImageIcon size={15} className="text-blue-500" aria-hidden="true" />}
+                disabled={exporting}
+                icon={<ImageIcon size={15} className="text-blue-500" aria-hidden="true" />}
                 label="PNG"
               />
               <ExportButton
                 onClick={() => printInvoice(previewRef.current!)}
-                disabled={exporting} icon={<Printer size={15} className="text-gray-500" aria-hidden="true" />}
+                disabled={exporting}
+                icon={<Printer size={15} className="text-gray-500" aria-hidden="true" />}
                 label="Print"
               />
               <button
@@ -572,11 +520,7 @@ function Card({ title, children }: { title: string; children: React.ReactNode })
   );
 }
 
-function Field({
-  label, id, children,
-}: {
-  label: string; id?: string; children: React.ReactNode;
-}) {
+function Field({ label, id, children }: { label: string; id?: string; children: React.ReactNode }) {
   return (
     <div>
       {id

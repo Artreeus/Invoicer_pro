@@ -24,6 +24,7 @@ import TermsPage from './pages/public/TermsPage';
 import BlogIndexPage from './pages/public/BlogIndexPage';
 import BlogArticlePage from './pages/public/BlogArticlePage';
 import InvoiceGeneratorPage from './pages/public/InvoiceGeneratorPage';
+import TemplatesPage from './pages/public/TemplatesPage';
 import CookieConsent from './components/ads/CookieConsent';
 import { useAuthStore } from './store/authStore';
 import { useThemeStore } from './store/themeStore';
@@ -57,6 +58,7 @@ function App() {
         <Route path="/register" element={authed ? <Navigate to="/dashboard" replace /> : <RegisterPage />} />
         <Route element={<PublicLayout />}>
           <Route path="/invoice-generator" element={<InvoiceGeneratorPage />} />
+          <Route path="/templates" element={<TemplatesPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/privacy" element={<PrivacyPage />} />

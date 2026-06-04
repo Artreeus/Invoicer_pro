@@ -5,9 +5,9 @@ import ThemeToggle from '../ui/ThemeToggle';
 
 const navLinks = [
   { to: '/invoice-generator', label: 'Free Generator' },
+  { to: '/templates', label: 'Templates' },
   { to: '/blog', label: 'Blog' },
   { to: '/about', label: 'About' },
-  { to: '/contact', label: 'Contact' },
 ];
 
 export default function PublicHeader() {
