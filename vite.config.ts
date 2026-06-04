@@ -68,10 +68,36 @@ function seoAndAds(client: string, siteUrl: string): Plugin {
         ].join('\n'),
       });
 
-      // sitemap.xml — no trailing slashes (matches the SPA routes exactly)
-      const urls = PUBLIC_PATHS.map(
-        p => `  <url><loc>${siteUrl}${p === '/' ? '/' : p}</loc></url>`
-      ).join('\n');
+      // sitemap.xml — with priority and changefreq hints for crawlers
+      const priorities: Record<string, string> = {
+        '/': '1.0',
+        '/invoice-generator': '0.9',
+        '/about': '0.7',
+        '/contact': '0.6',
+        '/blog': '0.8',
+        '/privacy': '0.3',
+        '/terms': '0.3',
+        '/login': '0.4',
+        '/register': '0.5',
+      };
+      const changefreqs: Record<string, string> = {
+        '/': 'weekly',
+        '/invoice-generator': 'weekly',
+        '/about': 'monthly',
+        '/contact': 'monthly',
+        '/blog': 'weekly',
+        '/privacy': 'yearly',
+        '/terms': 'yearly',
+        '/login': 'monthly',
+        '/register': 'monthly',
+      };
+      const today = new Date().toISOString().split('T')[0];
+      const urls = PUBLIC_PATHS.map(p => {
+        const loc = `${siteUrl}${p === '/' ? '/' : p}`;
+        const prio = priorities[p] ?? '0.6';
+        const freq = changefreqs[p] ?? 'monthly';
+        return `  <url><loc>${loc}</loc><lastmod>${today}</lastmod><changefreq>${freq}</changefreq><priority>${prio}</priority></url>`;
+      }).join('\n');
       this.emitFile({
         type: 'asset',
         fileName: 'sitemap.xml',
@@ -95,6 +121,16 @@ export default defineConfig(({ mode }) => {
     server: {
       proxy: {
         '/api': 'http://localhost:4000',
+      },
+    },
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            'vendor-react': ['react', 'react-dom', 'react-router-dom'],
+            'vendor-ui': ['lucide-react', 'sonner', 'zustand'],
+          },
+        },
       },
     },
   };
