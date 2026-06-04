@@ -16,7 +16,7 @@ export default function ImageUpload({ value, onChange, allowUrlInput = true }: I
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
 
-  const inputClass = 'w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all';
+  const inputClass = 'w-full px-3 py-2 border border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-500 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all';
 
   const handleFile = async (file: File | undefined) => {
     if (!file) return;
@@ -44,11 +44,11 @@ export default function ImageUpload({ value, onChange, allowUrlInput = true }: I
   return (
     <div className="space-y-2">
       <div className="flex items-center gap-3">
-        <div className="w-16 h-16 rounded-lg border border-gray-200 bg-gray-50 flex items-center justify-center overflow-hidden flex-shrink-0">
+        <div className="w-16 h-16 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 flex items-center justify-center overflow-hidden flex-shrink-0">
           {value ? (
             <img src={value} alt="Logo preview" className="w-full h-full object-contain" />
           ) : (
-            <Upload size={20} className="text-gray-300" />
+            <Upload size={20} className="text-gray-300 dark:text-gray-500" />
           )}
         </div>
         <div className="flex items-center gap-2">
@@ -56,7 +56,7 @@ export default function ImageUpload({ value, onChange, allowUrlInput = true }: I
             type="button"
             onClick={() => inputRef.current?.click()}
             disabled={uploading}
-            className="flex items-center gap-2 px-3 py-2 rounded-lg border border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors disabled:opacity-60"
+            className="flex items-center gap-2 px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors disabled:opacity-60"
           >
             {uploading ? <Loader2 size={16} className="animate-spin" /> : <Upload size={16} />}
             {uploading ? 'Uploading…' : value ? 'Replace' : 'Upload logo'}
@@ -65,7 +65,7 @@ export default function ImageUpload({ value, onChange, allowUrlInput = true }: I
             <button
               type="button"
               onClick={() => onChange('')}
-              className="flex items-center gap-1 px-2 py-2 rounded-lg text-sm text-gray-500 hover:bg-gray-50 transition-colors"
+              className="flex items-center gap-1 px-2 py-2 rounded-lg text-sm text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
             >
               <X size={16} />
               Remove
