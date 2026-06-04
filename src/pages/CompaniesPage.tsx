@@ -44,8 +44,8 @@ export default function CompaniesPage() {
     <div className="p-4 lg:p-8 max-w-6xl mx-auto">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Companies</h1>
-          <p className="text-sm text-gray-500 mt-1">Manage your business profiles</p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Companies</h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Manage your business profiles</p>
         </div>
         <button
           onClick={handleAdd}
@@ -59,12 +59,12 @@ export default function CompaniesPage() {
       {loading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {[1, 2, 3].map(i => (
-            <div key={i} className="bg-white rounded-xl border border-gray-100 p-6 animate-pulse">
+            <div key={i} className="bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 p-6 animate-pulse">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-xl bg-gray-200" />
-                <div className="flex-1"><div className="h-4 bg-gray-200 rounded w-32 mb-2" /><div className="h-3 bg-gray-100 rounded w-20" /></div>
+                <div className="w-12 h-12 rounded-xl bg-gray-200 dark:bg-gray-700" />
+                <div className="flex-1"><div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-32 mb-2" /><div className="h-3 bg-gray-100 dark:bg-gray-800 rounded w-20" /></div>
               </div>
-              <div className="space-y-2"><div className="h-3 bg-gray-100 rounded" /><div className="h-3 bg-gray-100 rounded w-3/4" /></div>
+              <div className="space-y-2"><div className="h-3 bg-gray-100 dark:bg-gray-800 rounded" /><div className="h-3 bg-gray-100 dark:bg-gray-800 rounded w-3/4" /></div>
             </div>
           ))}
         </div>
@@ -84,8 +84,8 @@ export default function CompaniesPage() {
           {companies.map(company => (
             <div
               key={company.id}
-              className={`bg-white rounded-xl border-2 p-6 transition-all hover:shadow-md cursor-pointer group ${
-                company.id === activeCompanyId ? 'border-teal-500 shadow-sm' : 'border-gray-100'
+              className={`bg-white dark:bg-gray-900 rounded-xl border-2 p-6 transition-all hover:shadow-md cursor-pointer group ${
+                company.id === activeCompanyId ? 'border-teal-500 shadow-sm' : 'border-gray-100 dark:border-gray-800'
               }`}
               onClick={() => setActiveCompany(company.id)}
             >
@@ -102,29 +102,29 @@ export default function CompaniesPage() {
                     </div>
                   )}
                   <div>
-                    <h3 className="font-semibold text-gray-900">{company.name}</h3>
+                    <h3 className="font-semibold text-gray-900 dark:text-gray-100">{company.name}</h3>
                     {company.id === activeCompanyId && (
-                      <span className="text-xs text-teal-600 font-medium">Active</span>
+                      <span className="text-xs text-teal-600 dark:text-teal-300 font-medium">Active</span>
                     )}
                   </div>
                 </div>
                 <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                   <button
                     onClick={(e) => { e.stopPropagation(); handleEdit(company); }}
-                    className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors"
+                    className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-400 dark:text-gray-500 hover:text-gray-600 transition-colors"
                   >
                     <Pencil size={14} />
                   </button>
                   <button
                     onClick={(e) => { e.stopPropagation(); handleDelete(company); }}
-                    className="p-1.5 rounded-lg hover:bg-red-50 text-gray-400 hover:text-red-500 transition-colors"
+                    className="p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-500/10 text-gray-400 dark:text-gray-500 hover:text-red-500 transition-colors"
                   >
                     <Trash2 size={14} />
                   </button>
                 </div>
               </div>
 
-              <div className="space-y-1.5 text-sm text-gray-500">
+              <div className="space-y-1.5 text-sm text-gray-500 dark:text-gray-400">
                 {company.address && (
                   <p className="truncate">{company.address}</p>
                 )}
@@ -149,7 +149,7 @@ export default function CompaniesPage() {
               </div>
 
               {(company.bin || company.tin) && (
-                <div className="mt-3 pt-3 border-t border-gray-50 flex gap-4 text-xs text-gray-400">
+                <div className="mt-3 pt-3 border-t border-gray-50 dark:border-gray-800 flex gap-4 text-xs text-gray-400 dark:text-gray-500">
                   {company.bin && <span>BIN: {company.bin}</span>}
                   {company.tin && <span>TIN: {company.tin}</span>}
                 </div>
