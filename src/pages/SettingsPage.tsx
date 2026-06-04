@@ -17,8 +17,8 @@ export default function SettingsPage() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [savingPassword, setSavingPassword] = useState(false);
 
-  const inputClass = 'w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all';
-  const labelClass = 'block text-sm font-medium text-gray-700 mb-1';
+  const inputClass = 'w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100 dark:placeholder-gray-500';
+  const labelClass = 'block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1';
 
   const profileChanged = name.trim() !== (user?.name ?? '') || email.trim() !== (user?.email ?? '');
 
@@ -57,14 +57,14 @@ export default function SettingsPage() {
   return (
     <div className="p-4 lg:p-8 max-w-2xl mx-auto">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">Account Settings</h1>
-        <p className="text-sm text-gray-500 mt-1">Manage your profile and password</p>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Account Settings</h1>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Manage your profile and password</p>
       </div>
 
-      <form onSubmit={handleProfile} className="bg-white rounded-xl border border-gray-100 p-6 mb-6">
+      <form onSubmit={handleProfile} className="bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 p-6 mb-6">
         <div className="flex items-center gap-2 mb-4">
-          <UserIcon size={16} className="text-teal-600" />
-          <h2 className="text-sm font-semibold text-gray-800">Profile</h2>
+          <UserIcon size={16} className="text-teal-600 dark:text-teal-300" />
+          <h2 className="text-sm font-semibold text-gray-800 dark:text-gray-100">Profile</h2>
         </div>
         <div className="space-y-4">
           <div>
@@ -88,10 +88,10 @@ export default function SettingsPage() {
         </div>
       </form>
 
-      <form onSubmit={handlePassword} className="bg-white rounded-xl border border-gray-100 p-6">
+      <form onSubmit={handlePassword} className="bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 p-6">
         <div className="flex items-center gap-2 mb-4">
-          <Lock size={16} className="text-teal-600" />
-          <h2 className="text-sm font-semibold text-gray-800">Change password</h2>
+          <Lock size={16} className="text-teal-600 dark:text-teal-300" />
+          <h2 className="text-sm font-semibold text-gray-800 dark:text-gray-100">Change password</h2>
         </div>
         <div className="space-y-4">
           <div>
