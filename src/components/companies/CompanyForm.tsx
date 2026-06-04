@@ -72,19 +72,19 @@ export default function CompanyForm({ company, onSubmit, onCancel }: CompanyForm
     { key: 'branding', label: 'Branding', icon: <Palette size={16} /> },
   ];
 
-  const inputClass = 'w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all';
-  const labelClass = 'block text-sm font-medium text-gray-700 mb-1';
+  const inputClass = 'w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100 dark:placeholder-gray-500';
+  const labelClass = 'block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1';
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className="flex gap-1 p-1 bg-gray-100 rounded-lg mb-6">
+      <div className="flex gap-1 p-1 bg-gray-100 dark:bg-gray-800 rounded-lg mb-6">
         {tabs.map(t => (
           <button
             key={t.key}
             type="button"
             onClick={() => setTab(t.key)}
             className={`flex items-center gap-1.5 px-3 py-2 rounded-md text-xs font-medium transition-all flex-1 justify-center ${
-              tab === t.key ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'
+              tab === t.key ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700'
             }`}
           >
             {t.icon}
@@ -152,7 +152,7 @@ export default function CompanyForm({ company, onSubmit, onCancel }: CompanyForm
       {tab === 'banking' && (
         <div className="space-y-6">
           <div>
-            <h3 className="text-sm font-semibold text-gray-800 mb-3">Bank Account</h3>
+            <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-100 mb-3">Bank Account</h3>
             <div className="space-y-3">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
@@ -187,7 +187,7 @@ export default function CompanyForm({ company, onSubmit, onCancel }: CompanyForm
             </div>
           </div>
           <div>
-            <h3 className="text-sm font-semibold text-gray-800 mb-3">Mobile Banking</h3>
+            <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-100 mb-3">Mobile Banking</h3>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>
                 <label className={labelClass}>bKash</label>
@@ -212,7 +212,7 @@ export default function CompanyForm({ company, onSubmit, onCancel }: CompanyForm
             <div>
               <label className={labelClass}>Brand Color</label>
               <div className="flex items-center gap-3">
-                <input type="color" value={brandColor} onChange={e => setBrandColor(e.target.value)} className="w-10 h-10 rounded-lg border border-gray-200 cursor-pointer" />
+                <input type="color" value={brandColor} onChange={e => setBrandColor(e.target.value)} className="w-10 h-10 rounded-lg border border-gray-200 dark:border-gray-700 cursor-pointer" />
                 <input className={inputClass} value={brandColor} onChange={e => setBrandColor(e.target.value)} />
               </div>
             </div>
@@ -242,8 +242,8 @@ export default function CompanyForm({ company, onSubmit, onCancel }: CompanyForm
         </div>
       )}
 
-      <div className="flex items-center justify-end gap-3 mt-6 pt-4 border-t border-gray-100">
-        <button type="button" onClick={onCancel} className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-800 transition-colors">
+      <div className="flex items-center justify-end gap-3 mt-6 pt-4 border-t border-gray-100 dark:border-gray-800">
+        <button type="button" onClick={onCancel} className="px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-800 transition-colors">
           Cancel
         </button>
         <button type="submit" className="px-5 py-2 bg-teal-600 text-white text-sm font-medium rounded-lg hover:bg-teal-700 transition-colors">

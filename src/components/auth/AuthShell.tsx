@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Receipt, ArrowLeft, Check } from 'lucide-react';
+import ThemeToggle from '../ui/ThemeToggle';
 
 interface AuthShellProps {
   title: string;
@@ -16,7 +17,7 @@ const highlights = [
 
 export default function AuthShell({ title, subtitle, children, footer }: AuthShellProps) {
   return (
-    <div className="min-h-screen flex bg-gray-50">
+    <div className="min-h-screen flex bg-gray-50 dark:bg-gray-950">
       {/* Branding panel (desktop) */}
       <div className="hidden lg:flex lg:w-1/2 relative bg-gradient-to-br from-teal-600 via-teal-700 to-teal-900 text-white p-12 flex-col justify-between overflow-hidden">
         <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-white/10 blur-2xl" />
@@ -58,24 +59,27 @@ export default function AuthShell({ title, subtitle, children, footer }: AuthShe
             <div className="w-8 h-8 rounded-lg bg-teal-600 flex items-center justify-center">
               <Receipt size={18} className="text-white" />
             </div>
-            <span className="font-bold text-gray-900">InvoiceBD</span>
+            <span className="font-bold text-gray-900 dark:text-gray-100">InvoiceBD</span>
           </Link>
-          <Link
-            to="/"
-            className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-800 transition-colors ml-auto"
-          >
-            <ArrowLeft size={15} /> Back to home
-          </Link>
+          <div className="flex items-center gap-1 ml-auto">
+            <ThemeToggle />
+            <Link
+              to="/"
+              className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 transition-colors px-2"
+            >
+              <ArrowLeft size={15} /> Back to home
+            </Link>
+          </div>
         </div>
 
         <div className="flex-1 flex items-center justify-center px-4 pb-10">
           <div className="w-full max-w-sm">
             <div className="mb-8">
-              <h1 className="text-2xl font-bold text-gray-900">{title}</h1>
-              <p className="text-sm text-gray-500 mt-1">{subtitle}</p>
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">{title}</h1>
+              <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{subtitle}</p>
             </div>
             {children}
-            <div className="mt-6 text-center text-sm text-gray-500">{footer}</div>
+            <div className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">{footer}</div>
           </div>
         </div>
       </div>
