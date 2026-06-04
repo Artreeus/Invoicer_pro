@@ -91,8 +91,8 @@ export default function ReportsPage() {
     <div className="p-4 lg:p-8 max-w-6xl mx-auto">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Reports</h1>
-          <p className="text-sm text-gray-500 mt-1">Revenue and tax reporting</p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Reports</h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Revenue and tax reporting</p>
         </div>
         <button
           onClick={exportCSV}
@@ -102,70 +102,70 @@ export default function ReportsPage() {
         </button>
       </div>
 
-      <div className="flex items-center gap-3 mb-6 bg-white rounded-lg border border-gray-200 p-3">
-        <Calendar size={16} className="text-gray-400" />
-        <input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)} className="px-2 py-1 border border-gray-200 rounded text-sm" />
-        <span className="text-gray-400 text-sm">to</span>
-        <input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)} className="px-2 py-1 border border-gray-200 rounded text-sm" />
-        <span className="text-xs text-gray-400">{filtered.length} invoices</span>
+      <div className="flex items-center gap-3 mb-6 bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-3">
+        <Calendar size={16} className="text-gray-400 dark:text-gray-500" />
+        <input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)} className="px-2 py-1 border border-gray-200 dark:border-gray-700 rounded text-sm dark:bg-gray-800 dark:text-gray-100" />
+        <span className="text-gray-400 dark:text-gray-500 text-sm">to</span>
+        <input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)} className="px-2 py-1 border border-gray-200 dark:border-gray-700 rounded text-sm dark:bg-gray-800 dark:text-gray-100" />
+        <span className="text-xs text-gray-400 dark:text-gray-500">{filtered.length} invoices</span>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-        <div className="bg-white rounded-xl border border-gray-100 p-5">
-          <p className="text-xs text-gray-500 font-medium">Total Revenue (Paid)</p>
-          <p className="text-xl font-bold text-emerald-600 mt-1">{formatCurrency(totalRevenue, 'BDT')}</p>
+        <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 p-5">
+          <p className="text-xs text-gray-500 dark:text-gray-400 font-medium">Total Revenue (Paid)</p>
+          <p className="text-xl font-bold text-emerald-600 dark:text-emerald-400 mt-1">{formatCurrency(totalRevenue, 'BDT')}</p>
         </div>
-        <div className="bg-white rounded-xl border border-gray-100 p-5">
-          <p className="text-xs text-gray-500 font-medium">Outstanding</p>
-          <p className="text-xl font-bold text-blue-600 mt-1">{formatCurrency(totalOutstanding, 'BDT')}</p>
+        <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 p-5">
+          <p className="text-xs text-gray-500 dark:text-gray-400 font-medium">Outstanding</p>
+          <p className="text-xl font-bold text-blue-600 dark:text-blue-400 mt-1">{formatCurrency(totalOutstanding, 'BDT')}</p>
         </div>
-        <div className="bg-white rounded-xl border border-gray-100 p-5">
-          <p className="text-xs text-gray-500 font-medium">VAT Collected</p>
-          <p className="text-xl font-bold text-amber-600 mt-1">{formatCurrency(totalVat, 'BDT')}</p>
+        <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 p-5">
+          <p className="text-xs text-gray-500 dark:text-gray-400 font-medium">VAT Collected</p>
+          <p className="text-xl font-bold text-amber-600 dark:text-amber-400 mt-1">{formatCurrency(totalVat, 'BDT')}</p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white rounded-xl border border-gray-100 p-6">
-          <h2 className="text-sm font-semibold text-gray-800 mb-4">Monthly Revenue</h2>
+        <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 p-6">
+          <h2 className="text-sm font-semibold text-gray-800 dark:text-gray-100 mb-4">Monthly Revenue</h2>
           {monthlySummary.length === 0 ? (
-            <p className="text-sm text-gray-400 text-center py-8">No revenue data</p>
+            <p className="text-sm text-gray-400 dark:text-gray-500 text-center py-8">No revenue data</p>
           ) : (
             <div className="space-y-2">
               {monthlySummary.map(([month, data]) => (
                 <div key={month} className="flex items-center gap-3">
-                  <span className="text-xs text-gray-500 w-20 flex-shrink-0">{month}</span>
-                  <div className="flex-1 h-6 bg-gray-100 rounded-full overflow-hidden">
+                  <span className="text-xs text-gray-500 dark:text-gray-400 w-20 flex-shrink-0">{month}</span>
+                  <div className="flex-1 h-6 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
                     <div
                       className="h-full bg-teal-500 rounded-full transition-all duration-500"
                       style={{ width: `${(data.revenue / maxMonthlyRevenue) * 100}%` }}
                     />
                   </div>
-                  <span className="text-xs font-medium text-gray-700 w-28 text-right">{formatCurrency(data.revenue, 'BDT')}</span>
+                  <span className="text-xs font-medium text-gray-700 dark:text-gray-300 w-28 text-right">{formatCurrency(data.revenue, 'BDT')}</span>
                 </div>
               ))}
             </div>
           )}
         </div>
 
-        <div className="bg-white rounded-xl border border-gray-100 p-6">
-          <h2 className="text-sm font-semibold text-gray-800 mb-4">Revenue by Client</h2>
+        <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 p-6">
+          <h2 className="text-sm font-semibold text-gray-800 dark:text-gray-100 mb-4">Revenue by Client</h2>
           {clientSummary.length === 0 ? (
-            <p className="text-sm text-gray-400 text-center py-8">No client data</p>
+            <p className="text-sm text-gray-400 dark:text-gray-500 text-center py-8">No client data</p>
           ) : (
             <div className="space-y-3">
               {clientSummary.slice(0, 8).map((client, i) => (
                 <div key={i} className="flex items-center justify-between">
                   <div className="flex items-center gap-2 min-w-0">
-                    <div className="w-6 h-6 rounded-full bg-teal-100 flex items-center justify-center text-[10px] font-bold text-teal-700 flex-shrink-0">
+                    <div className="w-6 h-6 rounded-full bg-teal-100 dark:bg-teal-500/20 flex items-center justify-center text-[10px] font-bold text-teal-700 dark:text-teal-300 flex-shrink-0">
                       {client.name.charAt(0)}
                     </div>
                     <div className="min-w-0">
-                      <p className="text-sm font-medium text-gray-900 truncate">{client.name}</p>
-                      <p className="text-xs text-gray-400">{client.count} invoices</p>
+                      <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">{client.name}</p>
+                      <p className="text-xs text-gray-400 dark:text-gray-500">{client.count} invoices</p>
                     </div>
                   </div>
-                  <span className="text-sm font-semibold text-gray-700 ml-2">{formatCurrency(client.total, 'BDT')}</span>
+                  <span className="text-sm font-semibold text-gray-700 dark:text-gray-300 ml-2">{formatCurrency(client.total, 'BDT')}</span>
                 </div>
               ))}
             </div>
