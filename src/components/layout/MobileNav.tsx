@@ -18,7 +18,7 @@ const navItems = [
 
 export default function MobileNav() {
   return (
-    <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-40 safe-area-bottom">
+    <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 z-40 safe-area-bottom">
       <div className="flex items-center justify-around px-1 py-1">
         {navItems.map(item => (
           <NavLink
@@ -28,7 +28,7 @@ export default function MobileNav() {
             className={({ isActive }) =>
               cn(
                 'flex flex-col items-center gap-0.5 px-3 py-2 rounded-lg text-xs font-medium transition-colors min-w-[56px]',
-                isActive ? 'text-teal-600' : 'text-gray-400'
+                isActive ? 'text-teal-600' : 'text-gray-400 dark:text-gray-500'
               )
             }
           >
