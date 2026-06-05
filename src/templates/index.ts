@@ -18,6 +18,12 @@ import AuroraTemplate from './AuroraTemplate';
 import OnyxTemplate from './OnyxTemplate';
 import SlateTemplate from './SlateTemplate';
 import VibrantTemplate from './VibrantTemplate';
+import WaveTemplate from './WaveTemplate';
+import SwissTemplate from './SwissTemplate';
+import LedgerTemplate from './LedgerTemplate';
+import SunsetTemplate from './SunsetTemplate';
+import TerminalTemplate from './TerminalTemplate';
+import NotionTemplate from './NotionTemplate';
 
 export const templateRegistry: Record<string, ComponentType<TemplateProps>> = {
   stripe: StripeTemplate,
@@ -25,6 +31,12 @@ export const templateRegistry: Record<string, ComponentType<TemplateProps>> = {
   onyx: OnyxTemplate,
   slate: SlateTemplate,
   vibrant: VibrantTemplate,
+  wave: WaveTemplate,
+  swiss: SwissTemplate,
+  ledger: LedgerTemplate,
+  sunset: SunsetTemplate,
+  terminal: TerminalTemplate,
+  notion: NotionTemplate,
   corporate: CorporateTemplate,
   modern: ModernTemplate,
   minimal: MinimalTemplate,
