@@ -136,6 +136,11 @@ export interface TemplateInfo {
 }
 
 export const INVOICE_TEMPLATES: TemplateInfo[] = [
+  { id: 'stripe', name: 'Stripe', description: 'Clean SaaS receipt with generous whitespace', thumbnail: '' },
+  { id: 'aurora', name: 'Aurora', description: 'Gradient mesh header with frosted glass card', thumbnail: '' },
+  { id: 'onyx', name: 'Onyx', description: 'Premium full-dark theme with gold accent', thumbnail: '' },
+  { id: 'slate', name: 'Slate', description: 'Editorial monochrome with oversized type', thumbnail: '' },
+  { id: 'vibrant', name: 'Vibrant', description: 'Bold colour blocks and duotone totals', thumbnail: '' },
   { id: 'corporate', name: 'Corporate', description: 'Premium header with structured grid layout', thumbnail: '' },
   { id: 'modern', name: 'Modern', description: 'Side accent bar with dark table header', thumbnail: '' },
   { id: 'executive', name: 'Executive', description: 'Dark header with gradient overlay', thumbnail: '' },

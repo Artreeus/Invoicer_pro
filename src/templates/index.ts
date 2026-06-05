@@ -13,8 +13,18 @@ import FormalTemplate from './FormalTemplate';
 import ExecutiveTemplate from './ExecutiveTemplate';
 import ElegantTemplate from './ElegantTemplate';
 import BoldTemplate from './BoldTemplate';
+import StripeTemplate from './StripeTemplate';
+import AuroraTemplate from './AuroraTemplate';
+import OnyxTemplate from './OnyxTemplate';
+import SlateTemplate from './SlateTemplate';
+import VibrantTemplate from './VibrantTemplate';
 
 export const templateRegistry: Record<string, ComponentType<TemplateProps>> = {
+  stripe: StripeTemplate,
+  aurora: AuroraTemplate,
+  onyx: OnyxTemplate,
+  slate: SlateTemplate,
+  vibrant: VibrantTemplate,
   corporate: CorporateTemplate,
   modern: ModernTemplate,
   minimal: MinimalTemplate,
