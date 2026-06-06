@@ -33,7 +33,7 @@ const DEMO_COMPANY: Company = {
 const DEMO_CLIENT: Client = {
   id: 'demo', company_id: 'demo', name: 'TechStart Limited',
   address: '18 Banani Road, Dhaka 1213', phone: '+880 1800-000000',
-  email: 'accounts@techstart.com', contact_person: 'Karim Rahman',
+  email: 'accounts@techstart.com', contact_person: 'John Smith',
   bin: '', tin: '', notes: '', created_at: '', updated_at: '',
 };
 
@@ -47,7 +47,7 @@ const DEMO_INVOICE: Invoice = {
   terms_and_conditions: 'Payment due within 30 days. Late payments subject to 2% monthly interest.',
   payment_instructions: 'bKash: 01711-000000 | DBBL: 1234567890',
   footer_thank_you_note: 'Thank you for your business!',
-  vat_disclaimer: '', authorized_signatory_name: 'Latifur Rahman', authorized_signatory_title: 'CEO',
+  vat_disclaimer: '', authorized_signatory_name: 'Jane Doe', authorized_signatory_title: 'Director',
   created_at: '', updated_at: '',
   items: DEMO_ITEMS,
 };
